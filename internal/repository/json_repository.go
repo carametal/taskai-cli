@@ -111,17 +111,29 @@ func (r *JSONTaskRepository) AddTask(task models.Task) error {
 }
 
 // GetTaskByID retrieves a task by ID.
+// It supports both full ID matching and partial ID (prefix) matching.
 func (r *JSONTaskRepository) GetTaskByID(id string) (models.Task, error) {
 	tasks, err := r.loadTasks() // Public load uses lock
 	if err != nil {
 		return models.Task{}, err
 	}
 
+	// Try exact match first
 	for _, task := range tasks {
 		if task.ID == id {
 			return task, nil
 		}
 	}
+	
+	// If ID is at least 8 characters, try prefix matching
+	if len(id) >= 8 {
+		for _, task := range tasks {
+			if len(task.ID) >= len(id) && task.ID[:len(id)] == id {
+				return task, nil
+			}
+		}
+	}
+	
 	return models.Task{}, ErrTaskNotFound
 }
 
