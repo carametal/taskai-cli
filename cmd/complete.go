@@ -6,8 +6,8 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"smarttask-cli/internal/models"
-	"smarttask-cli/internal/repository" // Import repository for error checking
+	"taskai-cli/internal/models"
+	"taskai-cli/internal/repository" // Import repository for error checking
 	"time"
 
 	"github.com/spf13/cobra"
@@ -20,7 +20,7 @@ var completeCmd = &cobra.Command{
 	Long: `Marks the task with the specified ID as complete.
 You can provide the full ID or the first 8 characters.
 For example:
-smarttask-cli complete 12345678`,
+taskai-cli complete 12345678`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) != 1 {
 			return errors.New("requires exactly one argument: the task ID")

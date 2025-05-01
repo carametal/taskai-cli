@@ -1,5 +1,5 @@
 {
-  "name": "smarttask-cli",
+  "name": "taskai-cli",
   "version": "0.1.0",
   "description": "AIエージェントを組み込んだインテリジェントなタスク管理CLIアプリケーション",
   "main": "src/index.js",

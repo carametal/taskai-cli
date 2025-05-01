@@ -1,10 +1,10 @@
-# SmartTask CLI
+# taskai CLI
 
 AIエージェントを組み込んだインテリジェントなタスク管理CLIアプリケーション
 
 ## 概要
 
-SmartTask CLIは、自然言語処理と機械学習を活用した次世代のタスク管理ツールです。コマンドラインから簡単に操作でき、以下の機能を提供します：
+taskai CLIは、自然言語処理と機械学習を活用した次世代のタスク管理ツールです。コマンドラインから簡単に操作でき、以下の機能を提供します：
 
 - 自然言語でのタスク入力と自動分類
 - 多様なフィルタリングオプション付きのタスク一覧表示
@@ -58,15 +58,15 @@ $ task now
 
 ```bash
 # インストール方法（準備中）
-npm install -g smarttask-cli
+npm install -g taskai-cli
 ```
 
 ## 開発セットアップ
 
 ```bash
 # リポジトリのクローン
-git clone https://github.com/yourusername/smarttask-cli.git
-cd smarttask-cli
+git clone https://github.com/yourusername/taskai-cli.git
+cd taskai-cli
 
 # 依存関係のインストール
 npm install

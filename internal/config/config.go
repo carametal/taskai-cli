@@ -12,7 +12,7 @@ type Config struct {
 }
 
 // DefaultDataDir is the default directory name for storing application data.
-const DefaultDataDir = ".smarttask"
+const DefaultDataDir = ".taskai"
 
 // DefaultDataFile is the default filename for the task data.
 const DefaultDataFile = "tasks.json"

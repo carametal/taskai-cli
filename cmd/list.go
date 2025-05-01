@@ -6,7 +6,7 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"smarttask-cli/internal/models" // Ensure import is present
+	"taskai-cli/internal/models" // Ensure import is present
 	"text/tabwriter"
 	"time"
 

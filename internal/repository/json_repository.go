@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"os"
-	"smarttask-cli/internal/models"
+	"taskai-cli/internal/models"
 	"sync"
 	"time"
 

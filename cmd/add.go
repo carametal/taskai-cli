@@ -6,7 +6,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"smarttask-cli/internal/models"
+	"taskai-cli/internal/models"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -19,7 +19,7 @@ var addCmd = &cobra.Command{
 	Long: `Adds a new task to your task list.
 Provide the task title as arguments.
 For example:
-smarttask-cli add "Finish the report"`,
+taskai-cli add "Finish the report"`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			return errors.New("requires a task title argument")

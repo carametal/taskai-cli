@@ -1,6 +1,6 @@
 package repository
 
-import "smarttask-cli/internal/models"
+import "taskai-cli/internal/models"
 
 // TaskRepository defines the interface for task persistence operations.
 type TaskRepository interface {

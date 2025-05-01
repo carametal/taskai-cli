@@ -1,4 +1,4 @@
-module smarttask-cli
+module taskai-cli
 
 go 1.24.1
 
