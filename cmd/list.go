@@ -6,7 +6,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"taskai-cli/internal/models" // Ensure import is present
 	"text/tabwriter"
 	"time"
 
@@ -19,9 +18,8 @@ var listCmd = &cobra.Command{
 	Short: "List all tasks",
 	Long:  `Displays a list of all tasks currently stored.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		var tasks []models.Task // Explicitly declare the type
-		var err error
-		tasks, err = taskRepo.GetAllTasks()
+		// Use the service to get all tasks
+		tasks, err := taskService.GetAllTasks()
 		if err != nil {
 			fmt.Printf("Error listing tasks: %v\n", err)
 			return
@@ -34,26 +32,34 @@ var listCmd = &cobra.Command{
 
 		// Initialize tabwriter
 		w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0) // minwidth, tabwidth, padding, padchar, flags
-		fmt.Fprintln(w, "ID\tSTATUS\tPRIORITY\tTITLE\tDUE DATE")
-		fmt.Fprintln(w, "--\t------\t--------\t-----\t--------")
+		fmt.Fprintln(w, "ID\tSTATUS\tPRIORITY\tCATEGORY\tTITLE\tDUE DATE")
+		fmt.Fprintln(w, "--\t------\t--------\t--------\t-----\t--------")
 
 		for _, task := range tasks {
 			// Format fields for display
-			idShort := task.ID[:8] // Show only first 8 chars of UUID
+			idShort := task.ID
+			if len(idShort) > 8 {
+				idShort = idShort[:8] // Show only first 8 chars of UUID
+			}
 			status := string(task.Status)
 			priority := string(task.Priority)
 			if priority == "" {
 				priority = "-" // Show dash if not set
+			}
+			category := string(task.Category)
+			if category == "" {
+				category = "-" // Show dash if not set
 			}
 			dueDate := "-"
 			if !task.DueDate.IsZero() {
 				dueDate = task.DueDate.Format(time.DateOnly) // Format as YYYY-MM-DD
 			}
 
-			fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\n",
+			fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\n",
 				idShort,
 				status,
 				priority,
+				category,
 				task.Title,
 				dueDate,
 			)

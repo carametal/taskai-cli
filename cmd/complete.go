@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"taskai-cli/internal/models"
 	"taskai-cli/internal/repository" // Import repository for error checking
-	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -35,11 +34,9 @@ taskai-cli complete 12345678`,
 		taskID := args[0]
 
 		// Attempt to get the task first to ensure it exists
-		task, err := taskRepo.GetTaskByID(taskID) // Assuming GetTaskByID can handle partial IDs if implemented
+		task, err := taskService.GetTaskByID(taskID)
 		if err != nil {
 			if errors.Is(err, repository.ErrTaskNotFound) {
-				// Try searching by prefix if full ID fails (optional enhancement)
-				// For now, just report not found based on exact match or repo's handling
 				fmt.Printf("Error: Task with ID '%s' not found.\n", taskID)
 			} else {
 				fmt.Printf("Error retrieving task: %v\n", err)
@@ -53,12 +50,8 @@ taskai-cli complete 12345678`,
 			return
 		}
 
-		// Update status and completion time
-		task.Status = models.StatusDone
-		task.CompletedAt = time.Now()
-
-		// Update the task in the repository
-		err = taskRepo.UpdateTask(task)
+		// Use the service to complete the task
+		err = taskService.CompleteTask(taskID)
 		if err != nil {
 			fmt.Printf("Error completing task: %v\n", err)
 			return

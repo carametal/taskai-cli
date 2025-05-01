@@ -16,7 +16,7 @@ var deleteCmd = &cobra.Command{
 	Use:   "delete [task ID]",
 	Short: "Delete a task",
 	Long: `Deletes the task with the specified ID.
-You can provide the full ID or the first 8 characters.
+You can provide the full ID or the first few characters.
 For example:
 taskai-cli delete 12345678`,
 	Args: func(cmd *cobra.Command, args []string) error {
@@ -24,8 +24,8 @@ taskai-cli delete 12345678`,
 			return errors.New("requires exactly one argument: the task ID")
 		}
 		// Basic ID format check
-		if len(args[0]) < 8 {
-			return errors.New("task ID must be at least 8 characters long")
+		if len(args[0]) < 3 {
+			return errors.New("task ID must be at least 3 characters long")
 		}
 		return nil
 	},
@@ -33,7 +33,7 @@ taskai-cli delete 12345678`,
 		taskID := args[0]
 
 		// First get the task to show details when deleting
-		task, err := taskRepo.GetTaskByID(taskID)
+		task, err := taskService.GetTaskByID(taskID)
 		if err != nil {
 			if errors.Is(err, repository.ErrTaskNotFound) {
 				fmt.Printf("Error: Task with ID '%s' not found.\n", taskID)
@@ -56,8 +56,8 @@ taskai-cli delete 12345678`,
 			}
 		}
 
-		// Delete the task
-		err = taskRepo.DeleteTask(task.ID)
+		// Use the service to delete the task
+		err = taskService.DeleteTask(task.ID)
 		if err != nil {
 			fmt.Printf("Error deleting task: %v\n", err)
 			return

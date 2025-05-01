@@ -8,23 +8,24 @@ import (
 	"os"
 	"taskai-cli/internal/config"
 	"taskai-cli/internal/repository"
+	"taskai-cli/internal/service"
 
 	"github.com/spf13/cobra"
 )
 
 var cfg *config.Config
 var taskRepo repository.TaskRepository
+var taskService service.TaskService
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "taskai-cli",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Short: "An AI-powered task management CLI",
+	Long: `TaskAI CLI is a powerful task management tool that uses
+AI to help you manage your tasks effectively.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+It allows you to create, manage, and organize tasks with natural language
+processing capabilities to make task management more intuitive.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
@@ -65,5 +66,9 @@ func initConfigAndRepo() {
 	if err != nil {
 		log.Fatalf("Error initializing repository: %v", err)
 	}
+	
+	// Initialize task service
+	taskService = service.NewTaskService(taskRepo)
+	
 	log.Printf("Using data file: %s", cfg.DataFilePath) // Log data file path for debugging
 }

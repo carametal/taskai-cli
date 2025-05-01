@@ -30,26 +30,45 @@ taskai-cli add "Finish the report"`,
 		// Combine args into a single title (basic implementation)
 		// TODO: Implement NLP parsing here later
 		title := strings.Join(args, " ")
-
+		
+		// Get flag values
+		description, _ := cmd.Flags().GetString("description")
+		categoryStr, _ := cmd.Flags().GetString("category")
+		priorityStr, _ := cmd.Flags().GetString("priority")
+		
+		// Convert to proper types
+		category := models.Category(categoryStr)
+		priority := models.Priority(priorityStr)
+		
+		// Create a task object with the necessary fields
 		task := models.Task{
-			Title: title,
-			// Other fields will get defaults (ID, Timestamps, Status) in AddTask
+			Title:       title,
+			Description: description,
+			Category:    category,
+			Priority:    priority,
 		}
-
+		
+		// Use the taskRepo directly to avoid the potential issue with the service
 		err := taskRepo.AddTask(task)
 		if err != nil {
 			fmt.Printf("Error adding task: %v\n", err)
 			return
 		}
 
-		fmt.Printf("✓ Task added: \"%s\" (ID: %s)\n", task.Title, task.ID)
+		fmt.Printf("✓ Task added: \"%s\"\n", title)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(addCmd)
 
-	// TODO: Add flags for specifying details like priority, due date, etc.
-	// e.g., addCmd.Flags().StringP("priority", "p", string(models.PriorityMedium), "Set task priority (high, medium, low)")
-	// e.g., addCmd.Flags().StringP("due", "d", "", "Set due date (e.g., 'tomorrow', 'next friday', '2025-12-31')")
+	// Add flags for task details
+	addCmd.Flags().StringP("description", "d", "", "Task description")
+	addCmd.Flags().StringP("category", "c", string(models.CategoryOther), 
+		fmt.Sprintf("Task category (%s, %s, %s, %s, %s)", 
+			models.CategoryWork, models.CategoryPersonal, models.CategoryLearning, 
+			models.CategoryHealth, models.CategoryOther))
+	addCmd.Flags().StringP("priority", "p", string(models.PriorityMedium), 
+		fmt.Sprintf("Task priority (%s, %s, %s)", 
+			models.PriorityHigh, models.PriorityMedium, models.PriorityLow))
 }
