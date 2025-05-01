@@ -17,6 +17,9 @@ type TaskService interface {
 	// GetAllTasks retrieves all tasks.
 	GetAllTasks() ([]models.Task, error)
 
+	// StartTask marks a task as in-progress.
+	StartTask(id string) error
+	
 	// CompleteTask marks a task as done.
 	CompleteTask(id string) error
 
@@ -102,6 +105,24 @@ func (s *DefaultTaskService) CompleteTask(id string) error {
 // DeleteTask implements TaskService.DeleteTask
 func (s *DefaultTaskService) DeleteTask(id string) error {
 	return s.repo.DeleteTask(id)
+}
+
+// StartTask implements TaskService.StartTask
+func (s *DefaultTaskService) StartTask(id string) error {
+	task, err := s.repo.GetTaskByID(id)
+	if err != nil {
+		return err
+	}
+
+	// Only update if the task is not already in progress
+	if task.Status == models.StatusInProgress {
+		return nil
+	}
+
+	task.Status = models.StatusInProgress
+	task.UpdatedAt = time.Now()
+
+	return s.repo.UpdateTask(task)
 }
 
 // UpdateTask implements TaskService.UpdateTask
